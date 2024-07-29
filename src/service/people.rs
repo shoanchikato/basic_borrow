@@ -1,25 +1,25 @@
 use crate::{model::person::Person, repo::people::Repository};
 
-pub trait Servicer<'a> {
-  fn add(&mut self, new_person: &'a Person);
-  fn remove(&mut self, id: i32);
-  fn get_all(&self) -> Vec<Person>;
-  fn get_one(&self, id: i32) -> Option<Person>;
-  fn update(&mut self, id: i32, new_person: &'a Person) -> Option<Person>;
+pub trait Servicer {
+    fn add(&mut self, new_person: Box<Person>);
+    fn remove(&mut self, id: i32);
+    fn get_all(&self) -> Vec<Person>;
+    fn get_one(&self, id: i32) -> Option<Person>;
+    fn update(&mut self, id: i32, new_person: Box<Person>) -> Option<Person>;
 }
 
-pub struct Service<'a> {
-  repo: &'a mut dyn Repository<'a>,
+pub struct Service {
+    repo: Box<dyn Repository>,
 }
 
-impl <'a> Service<'a> {
-  pub fn new(repo: &'a mut dyn Repository<'a>) -> Self {
-    Self { repo }
-  }
+impl Service {
+    pub fn new(repo: Box<dyn Repository>) -> Self {
+        Self { repo }
+    }
 }
 
-impl <'a> Servicer<'a> for Service <'a> {
-    fn add(&mut self, new_person: &'a Person) {
+impl Servicer for Service {
+    fn add(&mut self, new_person: Box<Person>) {
         self.repo.add(new_person);
     }
 
@@ -32,10 +32,10 @@ impl <'a> Servicer<'a> for Service <'a> {
     }
 
     fn get_one(&self, id: i32) -> Option<Person> {
-       self.repo.get_one(id)
+        self.repo.get_one(id)
     }
 
-    fn update(&mut self, id: i32, new_person: &'a Person) -> Option<Person> {
+    fn update(&mut self, id: i32, new_person: Box<Person>) -> Option<Person> {
         self.repo.update(id, new_person)
     }
 }

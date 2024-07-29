@@ -1,19 +1,23 @@
 use std::fmt::{Display, Formatter, Result};
 
 #[derive(Debug, Clone)]
-pub struct Person<'a> {
+pub struct Person {
     pub id: i32,
-    pub name: &'a str,
+    pub name: String,
     pub age: i32,
 }
 
-impl<'a> Person<'a> {
-    pub fn new(name: &'a str, age: i32) -> Self {
-        Self { id: 0, name, age }
+impl Person {
+    pub fn new(name: &str, age: i32) -> Self {
+        Self {
+            id: 0,
+            name: name.into(),
+            age,
+        }
     }
 }
 
-impl<'a> Display for Person<'a> {
+impl Display for Person {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         f.write_str(&format!(
             "Person {{ id: {}, name: \"{}\", age: {} }}",
