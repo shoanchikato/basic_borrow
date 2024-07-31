@@ -1,6 +1,6 @@
 use crate::{model::person::Person, repo::people::Repository};
 
-pub trait Servicer {
+pub trait Servicer: Send + Sync {
     fn add(&mut self, new_person: Box<Person>);
     fn remove(&mut self, id: i32);
     fn get_all(&self) -> Vec<Person>;

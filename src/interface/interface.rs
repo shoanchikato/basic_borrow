@@ -1,7 +1,7 @@
 use crate::model::person::Person;
 use crate::service::people::Servicer;
 
-pub trait Interfacer {
+pub trait Interfacer: Send + Sync {
     fn add(&mut self, new_person: Box<Person>);
     fn remove(&mut self, id: i32);
     fn get_all(&self) -> Vec<Person>;
