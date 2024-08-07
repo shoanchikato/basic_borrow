@@ -6,3 +6,9 @@ fmt:
 
 lint:
 	cargo clippy
+
+release:
+	cargo build --release
+
+run-r:
+	cargo run --release

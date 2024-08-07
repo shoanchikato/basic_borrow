@@ -9,3 +9,9 @@ futures = "0.3.30"
 reqwest =  { version = "0.12.4", features = ["blocking", "json"] }
 serde = { version = "1.0.202", features = ["derive"] }
 tokio = { version = "1.37.0", features = ["macros", "rt-multi-thread"] }
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
