@@ -2,9 +2,8 @@
 
 use axum::routing::Router;
 use std::sync::Arc;
-use tokio;
 
-use basic_borrow::interface::interface::{Interface, Interfacer};
+use basic_borrow::interface::app::{Interface, Interfacer};
 use basic_borrow::model::person::Person;
 use basic_borrow::repo::people::Repo;
 use basic_borrow::route;
@@ -16,11 +15,9 @@ async fn main() {
     let service = Service::new(Box::new(repo));
     let mut interface = Interface::new(Box::new(service));
 
-    let people = vec![
-        Person::new("John", 32),
+    let people = [Person::new("John", 32),
         Person::new("Jane", 22),
-        Person::new("James", 25),
-    ];
+        Person::new("James", 25)];
 
     println!("Add");
     people

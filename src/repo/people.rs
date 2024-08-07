@@ -12,6 +12,12 @@ pub struct Repo {
     people: Vec<Person>,
 }
 
+impl Default for Repo {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Repo {
     pub fn new() -> Self {
         Self { people: vec![] }

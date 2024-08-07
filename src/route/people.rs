@@ -6,7 +6,7 @@ use axum::{
 
 use std::sync::Arc;
 
-use crate::interface::interface::Interfacer;
+use crate::interface::app::Interfacer;
 use crate::model::person::Person;
 
 async fn get_one(
