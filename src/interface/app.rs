@@ -1,27 +1,27 @@
 use crate::model::person::Person;
 use crate::service::people::Servicer;
 
-pub trait Interfacer<'a> {
-    fn add(&mut self, new_person: &'a Person);
+pub trait Interfacer: Send + Sync {
+    fn add(&mut self, new_person: Box<Person>);
     fn remove(&mut self, id: i32);
     fn get_all(&self) -> Vec<Person>;
     fn get_one(&self, id: i32) -> Option<Person>;
-    fn update(&mut self, id: i32, new_person: &'a Person) -> Option<Person>;
+    fn update(&mut self, id: i32, new_person: Box<Person>) -> Option<Person>;
     fn print(&self);
 }
 
-pub struct Interface<'a> {
-    service: &'a mut dyn Servicer<'a>,
+pub struct Interface {
+    service: Box<dyn Servicer>,
 }
 
-impl<'a> Interface<'a> {
-    pub fn new(service: &'a mut dyn Servicer<'a>) -> Self {
+impl Interface {
+    pub fn new(service: Box<dyn Servicer>) -> Self {
         Self { service }
     }
 }
 
-impl<'a> Interfacer<'a> for Interface<'a> {
-    fn add(&mut self, new_person: &'a Person) {
+impl Interfacer for Interface {
+    fn add(&mut self, new_person: Box<Person>) {
         self.service.add(new_person);
     }
 
@@ -37,7 +37,7 @@ impl<'a> Interfacer<'a> for Interface<'a> {
         self.service.get_one(id)
     }
 
-    fn update(&mut self, id: i32, new_person: &'a Person) -> Option<Person> {
+    fn update(&mut self, id: i32, new_person: Box<Person>) -> Option<Person> {
         self.service.update(id, new_person)
     }
 

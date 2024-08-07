@@ -1,30 +1,36 @@
 use crate::model::person::Person;
 
-pub trait Repository<'a> {
-    fn add(&mut self, new_person: &'a Person);
+pub trait Repository: Send + Sync {
+    fn add(&mut self, new_person: Box<Person>);
     fn remove(&mut self, id: i32);
     fn get_all(&self) -> Vec<Person>;
     fn get_one(&self, id: i32) -> Option<Person>;
-    fn update(&mut self, id: i32, new_person: &'a Person) -> Option<Person>;
+    fn update(&mut self, id: i32, new_person: Box<Person>) -> Option<Person>;
 }
 
-pub struct Repo<'a> {
-    people: Vec<Person<'a>>,
+pub struct Repo {
+    people: Vec<Person>,
 }
 
-impl<'a> Repo<'a> {
+impl Default for Repo {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl Repo {
     pub fn new() -> Self {
         Self { people: vec![] }
     }
 }
 
-impl<'a> Repository<'a> for Repo<'a> {
-    fn add(&mut self, new_person: &'a Person) {
+impl Repository for Repo {
+    fn add(&mut self, new_person: Box<Person>) {
         let mut person = new_person.to_owned();
         let id = self.people.len() + 1;
         person.id = id as i32;
 
-        self.people.push(person);
+        self.people.push(*person);
     }
 
     fn remove(&mut self, id: i32) {
@@ -47,13 +53,14 @@ impl<'a> Repository<'a> for Repo<'a> {
         person.cloned()
     }
 
-    fn update(&mut self, id: i32, new_person: &'a Person) -> Option<Person> {
+    fn update(&mut self, id: i32, new_person: Box<Person>) -> Option<Person> {
         let index = self.people.iter_mut().position(|person| person.id == id);
         match index {
             Some(index) => {
                 if let Some(person) = self.people.get_mut(index) {
                     person.age = new_person.age;
-                    person.name = new_person.name;
+                    let name = new_person.name;
+                    person.name = name;
 
                     Some(person.to_owned())
                 } else {
