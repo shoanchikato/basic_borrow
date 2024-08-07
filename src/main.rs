@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-use basic_borrow::interface::interface::{Interface, Interfacer};
+use basic_borrow::interface::app::{Interface, Interfacer};
 use basic_borrow::model::person::Person;
 use basic_borrow::repo::people::Repo;
 use basic_borrow::service::people::Service;
